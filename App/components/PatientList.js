@@ -1,7 +1,5 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux';
-import { ActionCreators } from '../actions'
 
 import {
   Text,
@@ -13,37 +11,47 @@ import {
 
 import Patient from './Patient';
 import styles from '../assets/styles';
+import Api from '../lib/api';
 
 
-class PatientList extends Component {
+export default class PatientList extends Component {
   constructor(props) {
     super(props);
   }
 
   componentWillMount() {
-    this.setState(this.props);
     this.setState({ fetching: true });
-    setTimeout(() => {this.setState({ fetching: false })}, 10);
 
-    this.props.fetchPatients().then(() => {
-      this.setState({ searching: false });
-    });
+    Api.getPatients()
+      .then((patients) => {
+        console.log('patients', patients);
+        this.setState({patients, fetching: false });
+      })
+      .catch((err) => {
+        console.error(err);
+        this.setState({ fetching: false });
+      });
   }
 
   render() {
+    console.log(this.state);
 
-    const patients =  this.state.patients.map((patient, i) => (<Patient {...patient} key={i}/>));
+    const patients = _.get(this, 'state.patients', []);
+
+    const patientsList = patients.map((patient, i) => (<Patient {...patient} key={i}/>));
 
     const patientList = (
-      <ScrollView style={styles.wrapper}>
-        {patients}
+      <View>
+        <ScrollView style={styles.wrapper}>
+          {patientsList}
 
-        <TouchableOpacity activeOpacity={.5}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Calculate optimal route</Text>
-          </View>
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity activeOpacity={.5}>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>Calculate optimal route</Text>
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     );
 
     if (this.state.fetching) {
@@ -57,18 +65,3 @@ class PatientList extends Component {
     }
   }
 }
-
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(ActionCreators, dispatch);
-}
-
-function mapStateToProps(state) {
-  // console.log('mapStateToProps', state);
-  return {
-    patients: state.patients
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PatientList);
-

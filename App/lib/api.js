@@ -1,3 +1,5 @@
+import fakeStore from '../store.json';
+
 class Api {
   static headers() {
     return {
@@ -8,9 +10,8 @@ class Api {
   }
 
   static getPatients() {
-    return Api.get(`/api/`).then(resp => {
-      dispatch(setFetchedPatients({recipes: resp}));
-    })
+    // return Promise.resolve(fakeStore.patients);
+    return Api.get(`/midwife/bf7908d5-b61c-49ef-b203-cf05dd741671/patient`);
   }
 
   static get(route) {
@@ -22,7 +23,7 @@ class Api {
   }
 
   static xhr(route, params, verb) {
-    const host = 'http://localhost';
+    const host = 'http://localhost:8080/api';
     const url = `${host}${route}`;
 
     let options = Object.assign({ method: verb }, params ? { body: JSON.stringify(params) } : null);
@@ -33,14 +34,13 @@ class Api {
         let json = resp.json();
 
         if (resp.ok) {
-          return json
+          return json;
         }
 
         return json.then(err => {
           throw err
         });
-      })
-      .then(json => json.results);
+      });
   }
 }
 export default Api
