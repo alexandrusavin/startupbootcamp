@@ -50,14 +50,14 @@ export default class PatientList extends Component {
       .filter((patient) => patient.time[0] + patient.time[1] > 0)
       .map((patient) => _.extend(patient, { duration: timeToSec(patient.time) }));
 
-    if(!this.state.date) {
+    if (!this.state.date) {
       return Alert.alert(
         'Select leaving time',
         'Please select the leaving time in order to calculate the best route'
       )
     }
 
-    if(_.isEmpty(requests)) {
+    if (_.isEmpty(requests)) {
       return Alert.alert(
         'Select patients',
         'Please select at least one patient to schedule an appointment'
@@ -70,10 +70,14 @@ export default class PatientList extends Component {
       requests,
     };
 
-    console.log('requestPayload', requestPayload);
+    this.setState({ fetching: true });
+
     Api.getRouteForAppointments(requestPayload)
       .then((result) => {
-        console.log('result', result);
+        this.setState({ fetching: false });
+        this.props.navigation.navigate('Appointments', _.extend(result, {
+          patients: this.state.patients
+        }));
       });
   }
 
