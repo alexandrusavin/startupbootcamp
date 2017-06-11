@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   button: {
-    backgroundColor: "#d73352",
+    backgroundColor: "#511E26",
     paddingVertical: 15,
     marginVertical: 15,
     alignItems: "center",
@@ -69,8 +69,7 @@ const styles = StyleSheet.create({
     padding: 5
   },
   datePickerWrap: {
-    backgroundColor: '#fff',
-    paddingVertical: 10,
+    backgroundColor: 'rgba(214, 221, 214, .5)',
     marginBottom: 3
   },
   datePicker: {

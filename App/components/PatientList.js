@@ -53,7 +53,7 @@ export default class PatientList extends Component {
             style={styles.datePicker}
             date={this.state.date}
             mode="datetime"
-            placeholder="Select when do you plan to leave home"
+            placeholder="Press here to select leaving home time"
             format="YYYY-MM-DD"
             minDate={moment().format('YYYY-MM-DD')}
             maxDate={moment().add(7, 'days').format('YYYY-MM-DD')}
@@ -62,12 +62,17 @@ export default class PatientList extends Component {
             customStyles={{
               dateIcon: {
                 position: 'absolute',
-                left: 0,
+                left: 20,
                 top: 4,
                 marginLeft: 0
               },
               dateInput: {
-                marginLeft: 36
+                marginLeft: 36,
+                borderWidth: 0
+              },
+              placeholderText: {
+                color: '#000',
+                borderWidth: 0
               }
             }}
             onDateChange={(date) => {this.setState({date: date})}}

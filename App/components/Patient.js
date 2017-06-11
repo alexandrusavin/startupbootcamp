@@ -62,7 +62,7 @@ export default class Patient extends Component {
       suffix
     } = this.state.patient;
 
-    const backgroundColor = this.state.patient.time[0] + this.state.patient.time[1] === 0 ? 'rgba(255, 255, 255, .5)' : 'rgba(170, 186, 10, .5)';
+    const backgroundColor = this.state.patient.time[0] + this.state.patient.time[1] === 0 ? 'rgba(214, 221, 214, .5)' : 'rgba(170, 186, 10, .5)';
 
     return (
       <TouchableOpacity style={[styles.listItemWrap, { backgroundColor: backgroundColor }]}
