@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-
 import {
   Text,
   View,
@@ -8,6 +7,8 @@ import {
   ScrollView,
   TouchableOpacity
 } from 'react-native';
+import DatePicker from 'react-native-datepicker'
+import moment from 'moment';
 
 import Patient from './Patient';
 import styles from '../assets/styles';
@@ -17,35 +18,66 @@ import Api from '../lib/api';
 export default class PatientList extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {fetching: false};
   }
 
   componentWillMount() {
-    this.setState({ fetching: true });
+    this.setState({
+      fetching: true,
+      patients: []
+    });
 
     Api.getPatients()
       .then((patients) => {
-        console.log('patients', patients);
         this.setState({patients, fetching: false });
       })
       .catch((err) => {
-        console.error(err);
         this.setState({ fetching: false });
       });
   }
 
-  render() {
-    console.log(this.state);
+  _submit() {
+    console.log('state', this.state);
+  }
 
+  render() {
     const patients = _.get(this, 'state.patients', []);
 
-    const patientsList = patients.map((patient, i) => (<Patient {...patient} key={i}/>));
+    const patientsList = patients.map((patient, i) => (<Patient patient={patient} key={i}/>));
 
     const patientList = (
       <View>
+        <View style={styles.datePickerWrap}>
+          <DatePicker
+            style={styles.datePicker}
+            date={this.state.date}
+            mode="datetime"
+            placeholder="Select when do you plan to leave home"
+            format="YYYY-MM-DD"
+            minDate={moment().format('YYYY-MM-DD')}
+            maxDate={moment().add(7, 'days').format('YYYY-MM-DD')}
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+              dateIcon: {
+                position: 'absolute',
+                left: 0,
+                top: 4,
+                marginLeft: 0
+              },
+              dateInput: {
+                marginLeft: 36
+              }
+            }}
+            onDateChange={(date) => {this.setState({date: date})}}
+          />
+        </View>
+
         <ScrollView style={styles.wrapper}>
           {patientsList}
 
-          <TouchableOpacity activeOpacity={.5}>
+          <TouchableOpacity activeOpacity={.5} onPress={this._submit.bind(this)}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Calculate optimal route</Text>
             </View>

@@ -24,14 +24,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF'
   },
   iconWrap: {
+    flex: 1,
+    flexDirection: 'row',
     paddingHorizontal: 7,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#d73352"
   },
   icon: {
-    width: 20,
-    height: 20,
+    flex: 1
   },
   button: {
     backgroundColor: "#d73352",
@@ -50,10 +51,12 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   textHead: {
+    flex: 1,
     fontSize: 25
   },
   text: {
     flexDirection: "row",
+    alignItems: 'flex-start',
     color: "#000",
     backgroundColor: "transparent",
     alignSelf: 'stretch',
@@ -64,6 +67,15 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, .5)",
     marginVertical: 2,
     padding: 5
+  },
+  datePickerWrap: {
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    marginBottom: 3
+  },
+  datePicker: {
+    width: 360,
+    height: 40
   }
 });
 
