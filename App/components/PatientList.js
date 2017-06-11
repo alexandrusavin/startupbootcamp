@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
+  Alert,
   ActivityIndicator,
   ScrollView,
   TouchableOpacity
@@ -48,6 +49,20 @@ export default class PatientList extends Component {
       .map(_.partialRight(_.pick, ['id', 'time']))
       .filter((patient) => patient.time[0] + patient.time[1] > 0)
       .map((patient) => _.extend(patient, { duration: timeToSec(patient.time) }));
+
+    if(!this.state.date) {
+      return Alert.alert(
+        'Select leaving time',
+        'Please select the leaving time in order to calculate the best route'
+      )
+    }
+
+    if(_.isEmpty(requests)) {
+      return Alert.alert(
+        'Select patients',
+        'Please select at least one patient to schedule an appointment'
+      )
+    }
 
     const requestPayload = {
       startTime: this.state.date,
