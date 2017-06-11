@@ -14,12 +14,18 @@ import Patient from './Patient';
 import styles from '../assets/styles';
 import Api from '../lib/api';
 
+const timeToSec = (time) => (time[0] * 60 + time[1]) * 60;
+const travelModes = {
+  TRANSIT: 'TRANSIT',
+  DRIVING: 'DRIVING'
+};
+const DATEPICKER_FORMAT = '';
 
 export default class PatientList extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {fetching: false};
+    this.state = { fetching: false };
   }
 
   componentWillMount() {
@@ -30,7 +36,7 @@ export default class PatientList extends Component {
 
     Api.getPatients()
       .then((patients) => {
-        this.setState({patients, fetching: false });
+        this.setState({ patients, fetching: false });
       })
       .catch((err) => {
         this.setState({ fetching: false });
@@ -38,7 +44,22 @@ export default class PatientList extends Component {
   }
 
   _submit() {
-    console.log('state', this.state);
+    const requests = this.state.patients
+      .map(_.partialRight(_.pick, ['id', 'time']))
+      .filter((patient) => patient.time[0] + patient.time[1] > 0)
+      .map((patient) => _.extend(patient, { duration: timeToSec(patient.time) }));
+
+    const requestPayload = {
+      startTime: this.state.date,
+      travelMode: travelModes.DRIVING,
+      requests,
+    };
+
+    console.log('requestPayload', requestPayload);
+    Api.getRouteForAppointments(requestPayload)
+      .then((result) => {
+        console.log('result', result);
+      });
   }
 
   render() {
@@ -54,9 +75,9 @@ export default class PatientList extends Component {
             date={this.state.date}
             mode="datetime"
             placeholder="Press here to select leaving home time"
-            format="YYYY-MM-DD"
-            minDate={moment().format('YYYY-MM-DD')}
-            maxDate={moment().add(7, 'days').format('YYYY-MM-DD')}
+            format="YYYY-MM-DDTHH:mm:ss"
+            minDate={moment().format()}
+            maxDate={moment().add(7, 'days').format()}
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
             customStyles={{
@@ -75,7 +96,9 @@ export default class PatientList extends Component {
                 borderWidth: 0
               }
             }}
-            onDateChange={(date) => {this.setState({date: date})}}
+            onDateChange={(date) => {
+              this.setState({ date: date })
+            }}
           />
         </View>
 

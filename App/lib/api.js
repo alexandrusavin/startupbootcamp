@@ -11,6 +11,10 @@ class Api {
     return Api.get(`/midwife/bf7908d5-b61c-49ef-b203-cf05dd741671/patient`);
   }
 
+  static getRouteForAppointments(payload) {
+    return Api.post(`/midwife/schedule/bf7908d5-b61c-49ef-b203-cf05dd741671`, payload);
+  }
+
   static get(route) {
     return Api.xhr(route, null, 'GET');
   }
