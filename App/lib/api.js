@@ -1,5 +1,3 @@
-import fakeStore from '../store.json';
-
 class Api {
   static headers() {
     return {
@@ -10,7 +8,6 @@ class Api {
   }
 
   static getPatients() {
-    // return Promise.resolve(fakeStore.patients);
     return Api.get(`/midwife/bf7908d5-b61c-49ef-b203-cf05dd741671/patient`);
   }
 
