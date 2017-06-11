@@ -37,13 +37,13 @@ export default class AppointmentList extends Component {
           </View>
         </TouchableOpacity>
 
-        <Text style={styles.listItemWrap}>Leaving home: {startTime}</Text>
+        <Text style={[styles.listItemWrap, {backgroundColor: '#CED1C6'}]}>Leaving home: {startTime}</Text>
 
         <ScrollView style={styles.wrapper}>
           {appointmentList}
         </ScrollView>
 
-        <Text style={styles.listItemWrap}>Getting home: {endTime}</Text>
+        <Text style={[styles.listItemWrap, {backgroundColor: '#CED1C6'}]}>Getting home: {endTime}</Text>
       </View>
     )
   }
