@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import {
   ScrollView,
   View,
+  Text,
+  TouchableOpacity
 } from 'react-native';
 
 import Appointment from './Appointment';
@@ -17,8 +19,7 @@ export default class AppointmentList extends Component {
   }
 
   render() {
-    const appointments = _.get(this.props, 'navigation.state.params.appointments');
-    const patients = _.get(this.props, 'navigation.state.params.patients');
+    const {startTime, endTime, appointments, patients} = _.get(this.props, 'navigation.state.params');
     const getPatient = _.partial(_.find, patients);
 
     const appointmentList = appointments.map((appointment) => (
@@ -29,10 +30,20 @@ export default class AppointmentList extends Component {
     ));
 
     return (
-      <View>
+      <View style={styles.container}>
+        <TouchableOpacity activeOpacity={.5} onPress={this.props.navigation.goBack.bind(this, null)}>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>&lt; Back</Text>
+          </View>
+        </TouchableOpacity>
+
+        <Text style={styles.listItemWrap}>Leaving home: {startTime}</Text>
+
         <ScrollView style={styles.wrapper}>
           {appointmentList}
         </ScrollView>
+
+        <Text style={styles.listItemWrap}>Getting home: {endTime}</Text>
       </View>
     )
   }

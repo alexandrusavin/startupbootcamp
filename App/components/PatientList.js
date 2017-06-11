@@ -4,6 +4,7 @@ import {
   Text,
   View,
   Alert,
+  Image,
   ActivityIndicator,
   ScrollView,
   TouchableOpacity
@@ -20,7 +21,8 @@ const travelModes = {
   TRANSIT: 'TRANSIT',
   DRIVING: 'DRIVING'
 };
-const DATEPICKER_FORMAT = '';
+const background = require("../assets/background.jpg");
+
 
 export default class PatientList extends Component {
   constructor(props) {
@@ -74,10 +76,14 @@ export default class PatientList extends Component {
 
     Api.getRouteForAppointments(requestPayload)
       .then((result) => {
+        console.log(result);
         this.setState({ fetching: false });
         this.props.navigation.navigate('Appointments', _.extend(result, {
           patients: this.state.patients
         }));
+      })
+      .catch((err) => {
+        console.error(err);
       });
   }
 
@@ -87,7 +93,14 @@ export default class PatientList extends Component {
     const patientsList = patients.map((patient, i) => (<Patient patient={patient} key={i}/>));
 
     const patientList = (
-      <View>
+
+      <Image
+        style={[styles.background, styles.container]}
+        source={background}
+        resizeMode="cover"
+        resizeMethod="resize"
+        blurRadius={10}
+      >
         <View style={styles.datePickerWrap}>
           <DatePicker
             style={styles.datePicker}
@@ -130,7 +143,7 @@ export default class PatientList extends Component {
             </View>
           </TouchableOpacity>
         </ScrollView>
-      </View>
+      </Image>
     );
 
     if (this.state.fetching) {

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import {
-  Image,
-  NavigatorIOS,
   Platform
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 import PatientList from './components/PatientList';
 import AppointmentList from './components/AppointmentList';
-import styles from './assets/styles';
+
 const background = require("./assets/background.jpg");
 
 const Routes = {
@@ -24,45 +22,28 @@ const Routes = {
   }
 };
 
+const navigationConfig = {
+  initialRouteName: 'Index',
+  headerMode: 'none',
+
+  /*
+   * Use modal on iOS because the card mode comes from the right,
+   * which conflicts with the drawer example gesture
+   */
+  mode: Platform.OS === 'ios' ? 'modal' : 'card',
+  navigationOptions: {
+    title: 'App Name',
+    headerTintColor: 'black',
+  }
+};
+
 const AppNavigator = StackNavigator(
   {
     ...Routes,
+
     Index: {
       screen: PatientList,
     },
-  },
-  {
-    initialRouteName: 'Index',
-    headerMode: 'none',
-
-    /*
-     * Use modal on iOS because the card mode comes from the right,
-     * which conflicts with the drawer example gesture
-     */
-    mode: Platform.OS === 'ios' ? 'modal' : 'card',
-  }
-);
-
-
-class App extends Component {
-  render() {
-    return (
-      <Image
-        style={[styles.background, styles.container]}
-        source={background}
-        resizeMode="cover"
-        resizeMethod="resize"
-        blurRadius={10}
-      >
-        <NavigatorIOS
-          initialRoute={{
-            component: PatientList,
-            title: 'My Initial Scene',
-          }}
-        />
-      </Image>
-    )
-  }
-}
+  }, navigationConfig);
 
 export default AppNavigator;
