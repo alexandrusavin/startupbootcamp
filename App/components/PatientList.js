@@ -99,7 +99,7 @@ export default class PatientList extends Component {
         source={background}
         resizeMode="cover"
         resizeMethod="resize"
-        blurRadius={10}
+        blurRadius={20}
       >
         <View style={styles.datePickerWrap}>
           <DatePicker
